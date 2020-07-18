@@ -9,7 +9,7 @@ class PlayingField
 		Paddle *playerPaddle, *npcPaddle;
 		static const int height = 720;
 		static const int width = 1280;
-		static const int divider = 16;
+		static const int divider = 8;
 
 		PlayingField();
 };

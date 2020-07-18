@@ -6,36 +6,36 @@
 // create a method to draw the paddles
 int Pong::Init()
 {
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
-	{
-		SDL_Log("Failed to initialize SDL: %s\n", SDL_GetError());
-		return -1;
-	}
+  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0)
+  {
+    SDL_Log("Failed to initialize SDL: %s\n", SDL_GetError());
+    return -1;
+  }
 
 	this->Field = new PlayingField();
 	PlayingField *field = this->Field;
 	this->window = SDL_CreateWindow("Pong",
-																	SDL_WINDOWPOS_CENTERED,
-																	SDL_WINDOWPOS_CENTERED,
-																	field->width,
-																	field->height,
-																	0);
+                                  SDL_WINDOWPOS_CENTERED,
+                                  SDL_WINDOWPOS_CENTERED,
+                                  field->width,
+                                  field->height,
+                                  0);
 
-	if(this->window == NULL)
-	{
-		SDL_Log("Failed to create SDL window: %s\n", SDL_GetError());
-		SDL_Quit();
-		return -1;
-	}
+  if(this->window == NULL)
+  {
+    SDL_Log("Failed to create SDL window: %s\n", SDL_GetError());
+    SDL_Quit();
+    return -1;
+  }
 
-	this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-	if(this->renderer == NULL)
-	{
-		SDL_Log("Failed to create SDL renderer: %s\n", SDL_GetError());
-		SDL_DestroyWindow(this->window);
-		SDL_Quit();
-		return -1;
-	}
+  this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  if(this->renderer == NULL)
+  {
+    SDL_Log("Failed to create SDL renderer: %s\n", SDL_GetError());
+    SDL_DestroyWindow(this->window);
+    SDL_Quit();
+    return -1;
+  }
 
 #ifdef DEBUG_PONG
 	cout << "Successfully created a window and a renderer" << endl;
@@ -67,12 +67,10 @@ void Pong::DrawPlayingField(SDL_Rect& fieldRect, SDL_Rect& lineRect)
 
 	// Set the draw color to black and draw the field
 	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawRect(this->renderer, &fieldRect);
 	SDL_RenderFillRect(this->renderer, &fieldRect);
 
 	// Set the draw color to white and draw the dividing line
 	SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderDrawRect(this->renderer, &lineRect);
 	SDL_RenderFillRect(this->renderer, &lineRect);
 
 #ifdef DEBUG_PONG
