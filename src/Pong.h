@@ -16,7 +16,9 @@ class Pong
 		PlayingField *Field;
 
 		int Init();
-		void DrawPlayingField(SDL_Rect& fieldRect, SDL_Rect& lineRect);
+		void DrawPlayingField(SDL_Rect& lineRect);
+    void DrawPaddles(SDL_Rect& player, SDL_Rect& npc);
+    void DrawBall(SDL_Rect& ball);
 };
 
 #endif

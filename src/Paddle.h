@@ -1,6 +1,9 @@
 #ifndef PADDLE_H
 #define PADDLE_H
 
+#define PADDLE_HEIGHT 100
+#define PADDLE_WIDTH 10
+
 class Paddle
 {
 	public:

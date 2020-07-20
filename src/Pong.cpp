@@ -19,7 +19,7 @@ int Pong::Init()
                                   SDL_WINDOWPOS_CENTERED,
                                   field->width,
                                   field->height,
-                                  0);
+                                  SDL_WINDOW_ALLOW_HIGHDPI);
 
   if(this->window == NULL)
   {
@@ -37,7 +37,9 @@ int Pong::Init()
     return -1;
   }
 
+  int ret_num = SDL_RenderSetLogicalSize(renderer, field->width, field->height);
 #ifdef DEBUG_PONG
+  cout << ret_num << endl;
 	cout << "Successfully created a window and a renderer" << endl;
 #endif
 
@@ -51,23 +53,18 @@ int Pong::Init()
  *	The field should take up the whole space, whereas
  *	the line should divide the playing area
  */
-void Pong::DrawPlayingField(SDL_Rect& fieldRect, SDL_Rect& lineRect)
+void Pong::DrawPlayingField(SDL_Rect& lineRect)
 {
 	int DividerLoc = this->Field->width / 2;
 
-	fieldRect.x = 0;
-	fieldRect.y = 0;
-	fieldRect.w = this->Field->width;
-	fieldRect.h = this->Field->height;
+  // ensure that the renderer is cleared, and the background is black
+	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderClear(this->renderer);
 
 	lineRect.x = DividerLoc - (this->Field->divider / 2);;
 	lineRect.w = this->Field->divider;
 	lineRect.y = 0;
 	lineRect.h = this->Field->height;
-
-	// Set the draw color to black and draw the field
-	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	SDL_RenderFillRect(this->renderer, &fieldRect);
 
 	// Set the draw color to white and draw the dividing line
 	SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -77,18 +74,47 @@ void Pong::DrawPlayingField(SDL_Rect& fieldRect, SDL_Rect& lineRect)
 	cout << "Field width: " << this->Field->width << endl;
 	cout << "Field height: " << this->Field->height << endl;
 	cout << "Divider location: " << DividerLoc << endl;
-	cout << "Field x, y, width, and height: " << fieldRect.x << ", " << fieldRect.y << ", " << fieldRect.w << ", " << fieldRect.h << endl;
 	cout << "Divider x, y, width, and height: " << lineRect.x << ", " << lineRect.y << ", " << lineRect.w << ", " << lineRect.h << endl;
 #endif
+}
 
-	SDL_RenderPresent(this->renderer);
+void Pong::DrawPaddles(SDL_Rect& player, SDL_Rect& npc)
+{
+  Paddle *PlayerPaddle = this->Field->playerPaddle;
+  player.x = PlayerPaddle->xpos;
+  player.y = PlayerPaddle->ypos;
+  player.w = PlayerPaddle->width;
+  player.h = PlayerPaddle->height;
+
+  Paddle *NPCPaddle = this->Field->npcPaddle;
+  npc.x = NPCPaddle->xpos;
+  npc.y = NPCPaddle->ypos;
+  npc.w = NPCPaddle->width;
+  npc.h = NPCPaddle->height;
+
+  // ensure the draw color is white
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRect(this->renderer, &player);
+  SDL_RenderFillRect(this->renderer, &npc);
+}
+
+void Pong::DrawBall(SDL_Rect& ball)
+{
+  Ball *PongBall = this->Field->ball;
+  ball.x = PongBall->xpos;
+  ball.y = PongBall->ypos;
+  ball.w = PongBall->width;
+  ball.h = PongBall->height;
+
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRect(this->renderer, &ball);
 }
 
 int main(int argc, char *argv[])
 {
 	SDL_Event event;
 	bool quit = false;
-	SDL_Rect fieldRect, divideRect, playerRect, npcRect;
+	SDL_Rect divideRect, playerRect, npcRect, ballRect;
 	Pong Pong;
 
 	if(Pong.Init() < 0)
@@ -97,7 +123,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	Pong.DrawPlayingField(fieldRect, divideRect);
+	Pong.DrawPlayingField(divideRect);
+  Pong.DrawPaddles(playerRect, npcRect);
+  Pong.DrawBall(ballRect);
+  SDL_RenderPresent(Pong.renderer);
 
 	while(!quit)
 	{
