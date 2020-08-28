@@ -117,6 +117,7 @@ int main(int argc, char *argv[])
 	SDL_Rect divideRect, playerRect, npcRect, ballRect;
 	Pong Pong;
 
+  Uint32 dt = 0.0f;
 	if(Pong.Init() < 0)
 	{
 		cout << "An error occurred with starting Pong. Closing..." << endl;
@@ -127,6 +128,7 @@ int main(int argc, char *argv[])
   Pong.DrawPaddles(playerRect, npcRect);
   Pong.DrawBall(ballRect);
   SDL_RenderPresent(Pong.renderer);
+  dt = SDL_GetTicks();
 
 	while(!quit)
 	{
@@ -138,12 +140,39 @@ int main(int argc, char *argv[])
 			}
 			if(event.type == SDL_KEYDOWN)
 			{
-				quit = true;
+        // check which key was pressed
+        // and react accordingly
+        switch(event.key.keysym.sym)
+        {
+          case SDLK_w:
+            // move paddle1 up
+            cout << "change in time: " << dt << endl;
+            Pong.Field->MovePaddleUp(*(Pong.Field->playerPaddle), dt);
+            break;
+          case SDLK_s:
+            // move paddle1 down
+            Pong.Field->MovePaddleDown(*(Pong.Field->playerPaddle), dt);
+            break;
+          case SDLK_UP:
+            // move paddle2 up
+            Pong.Field->MovePaddleUp(*(Pong.Field->npcPaddle), dt);
+            break;
+          case SDLK_DOWN:
+            // move paddle2 down
+            Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
+            break;
+        }
 			}
 			if(event.type == SDL_MOUSEBUTTONDOWN)
 			{
 				quit = true;
 			}
+
+      Pong.DrawPlayingField(divideRect);
+      Pong.DrawPaddles(playerRect, npcRect);
+      Pong.DrawBall(ballRect);
+      SDL_RenderPresent(Pong.renderer);
+      dt = SDL_GetTicks() - dt;
 		}
 	}
 }

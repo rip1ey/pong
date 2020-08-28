@@ -13,3 +13,21 @@ PlayingField::PlayingField()
   npcPaddle = new Paddle(npcX, startY);
   ball = new Ball(ballX, ballY);
 }
+
+void PlayingField::MovePaddleUp(Paddle& paddle, unsigned int dt)
+{
+  paddle.MoveUp(dt);
+  if(paddle.ypos < 0)
+  {
+    paddle.ypos = 0;
+  }
+}
+
+void PlayingField::MovePaddleDown(Paddle& paddle, unsigned int dt)
+{
+  paddle.MoveDown(dt);
+  if((paddle.ypos + paddle.height) > height)
+  {
+    paddle.ypos = height - paddle.height;
+  }
+}

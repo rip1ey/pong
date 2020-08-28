@@ -7,12 +7,14 @@
 class Paddle
 {
 	public:
-		int x, y;
+		float x, y;
 		int height, width;
-		int xpos, ypos;
-		static const int speed = 5;
+		float xpos, ypos;
+    float vely;     // paddle will only move in y direction
 
 		Paddle(int x, int y);
+    void MoveUp(unsigned int dt);
+    void MoveDown(unsigned int dt);
 };
 
 #endif
