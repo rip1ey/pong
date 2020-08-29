@@ -2,10 +2,10 @@
 
 Paddle::Paddle(int x, int y)
 {
-	xpos = x;
-	ypos = y;
-	height = PADDLE_HEIGHT;
-	width = PADDLE_WIDTH;
+  xpos = x;
+  ypos = y;
+  height = PADDLE_HEIGHT;
+  width = PADDLE_WIDTH;
   vely = 5.0f;
 }
 

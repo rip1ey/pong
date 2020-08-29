@@ -12,9 +12,9 @@ int Pong::Init()
     return -1;
   }
 
-	this->Field = new PlayingField();
-	PlayingField *field = this->Field;
-	this->window = SDL_CreateWindow("Pong",
+  this->Field = new PlayingField();
+  PlayingField *field = this->Field;
+  this->window = SDL_CreateWindow("Pong",
                                   SDL_WINDOWPOS_CENTERED,
                                   SDL_WINDOWPOS_CENTERED,
                                   field->width,
@@ -40,7 +40,7 @@ int Pong::Init()
   int ret_num = SDL_RenderSetLogicalSize(renderer, field->width, field->height);
 #ifdef DEBUG_PONG
   cout << ret_num << endl;
-	cout << "Successfully created a window and a renderer" << endl;
+  cout << "Successfully created a window and a renderer" << endl;
 #endif
 
 	return 0;
@@ -55,26 +55,26 @@ int Pong::Init()
  */
 void Pong::DrawPlayingField(SDL_Rect& lineRect)
 {
-	int DividerLoc = this->Field->width / 2;
+  int DividerLoc = this->Field->width / 2;
 
   // ensure that the renderer is cleared, and the background is black
-	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(this->renderer);
 
-	lineRect.x = DividerLoc - (this->Field->divider / 2);;
-	lineRect.w = this->Field->divider;
-	lineRect.y = 0;
-	lineRect.h = this->Field->height;
+  lineRect.x = DividerLoc - (this->Field->divider / 2);;
+  lineRect.w = this->Field->divider;
+  lineRect.y = 0;
+  lineRect.h = this->Field->height;
 
-	// Set the draw color to white and draw the dividing line
-	SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-	SDL_RenderFillRect(this->renderer, &lineRect);
+  // Set the draw color to white and draw the dividing line
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRect(this->renderer, &lineRect);
 
 #ifdef DEBUG_PONG
-	cout << "Field width: " << this->Field->width << endl;
-	cout << "Field height: " << this->Field->height << endl;
-	cout << "Divider location: " << DividerLoc << endl;
-	cout << "Divider x, y, width, and height: " << lineRect.x << ", " << lineRect.y << ", " << lineRect.w << ", " << lineRect.h << endl;
+  cout << "Field width: " << this->Field->width << endl;
+  cout << "Field height: " << this->Field->height << endl;
+  cout << "Divider location: " << DividerLoc << endl;
+  cout << "Divider x, y, width, and height: " << lineRect.x << ", " << lineRect.y << ", " << lineRect.w << ", " << lineRect.h << endl;
 #endif
 }
 
@@ -112,36 +112,36 @@ void Pong::DrawBall(SDL_Rect& ball)
 
 int main(int argc, char *argv[])
 {
-	SDL_Event event;
-	bool quit = false;
-	SDL_Rect divideRect, playerRect, npcRect, ballRect;
-	Pong Pong;
+  SDL_Event event;
+  bool quit = false;
+  SDL_Rect divideRect, playerRect, npcRect, ballRect;
+  Pong Pong;
   Pong.play_has_started = 0;
 
   Uint32 dt = 0.0f;
-	if(Pong.Init() < 0)
-	{
-		cout << "An error occurred with starting Pong. Closing..." << endl;
-		return -1;
-	}
+  if(Pong.Init() < 0)
+  {
+    cout << "An error occurred with starting Pong. Closing..." << endl;
+    return -1;
+  }
 
   dt = SDL_GetTicks() * .001;
-	Pong.DrawPlayingField(divideRect);
+  Pong.DrawPlayingField(divideRect);
   Pong.DrawPaddles(playerRect, npcRect);
   Pong.DrawBall(ballRect);
   SDL_RenderPresent(Pong.renderer);
 
-	while(!quit)
-	{
-		while(SDL_PollEvent(&event))
-		{
-			if(event.type == SDL_QUIT)
-			{
-				quit = true;
-			}
+  while(!quit)
+  {
+    while(SDL_PollEvent(&event))
+    {
+      if(event.type == SDL_QUIT)
+      {
+        quit = true;
+      }
 
-			if(event.type == SDL_KEYDOWN)
-			{
+      if(event.type == SDL_KEYDOWN)
+      {
         Pong.play_has_started = 1;
         // check which key was pressed
         // and react accordingly
@@ -165,13 +165,13 @@ int main(int argc, char *argv[])
             Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
             break;
         }
-			}
+      }
 
-			if(event.type == SDL_MOUSEBUTTONDOWN)
-			{
-				quit = true;
-			}
-		}
+      if(event.type == SDL_MOUSEBUTTONDOWN)
+      {
+        quit = true;
+      }
+    }
 
     if(Pong.play_has_started)
     {
@@ -183,5 +183,5 @@ int main(int argc, char *argv[])
     Pong.DrawBall(ballRect);
     SDL_RenderPresent(Pong.renderer);
     dt = (SDL_GetTicks() - dt) * .001;
-	}
+  }
 }

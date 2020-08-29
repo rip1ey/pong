@@ -6,13 +6,13 @@
 
 class Paddle
 {
-	public:
-		float x, y;
-		int height, width;
-		float xpos, ypos;
+  public:
+    float x, y;
+    int height, width;
+    float xpos, ypos;
     float vely;     // paddle will only move in y direction
 
-		Paddle(int x, int y);
+    Paddle(int x, int y);
     void MoveUp(unsigned int dt);
     void MoveDown(unsigned int dt);
 };

@@ -6,15 +6,15 @@
 
 class PlayingField
 {
-	public:
-		Paddle *playerPaddle, *npcPaddle;
+  public:
+    Paddle *playerPaddle, *npcPaddle;
     Ball *ball;
 
-		static const int height = 720;
-		static const int width = 1280;
-		static const int divider = 8;
+    static const int height = 720;
+    static const int width = 1280;
+    static const int divider = 8;
 
-		PlayingField();
+    PlayingField();
     void MovePaddleUp(Paddle& paddle, unsigned int dt);
     void MovePaddleDown(Paddle& paddle, unsigned int dt);
     void MoveBall(Ball& ball, unsigned int dt);
