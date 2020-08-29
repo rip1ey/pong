@@ -14,6 +14,7 @@ class Pong
 		SDL_Window *window;
 		SDL_Renderer *renderer;
 		PlayingField *Field;
+    int play_has_started;
 
 		int Init();
 		void DrawPlayingField(SDL_Rect& lineRect);

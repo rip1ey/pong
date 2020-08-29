@@ -4,6 +4,9 @@
 #define BALL_HEIGHT 20
 #define BALL_WIDTH 20
 
+#include <stdlib.h>
+#include <time.h>
+
 class Ball
 {
   public:
@@ -15,6 +18,10 @@ class Ball
     int ypos;
 
     Ball(int x, int y);
+    void MoveBall(unsigned int dt);
+  private:
+    int direction[2];
+    int rand_num;
 };
 
 #endif

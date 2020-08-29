@@ -31,3 +31,13 @@ void PlayingField::MovePaddleDown(Paddle& paddle, unsigned int dt)
     paddle.ypos = height - paddle.height;
   }
 }
+
+void PlayingField::MoveBall(Ball& ball, unsigned int dt)
+{
+  ball.MoveBall(dt);
+}
+
+void PlayingField::Reset()
+{
+
+}

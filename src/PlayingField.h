@@ -17,6 +17,8 @@ class PlayingField
 		PlayingField();
     void MovePaddleUp(Paddle& paddle, unsigned int dt);
     void MovePaddleDown(Paddle& paddle, unsigned int dt);
+    void MoveBall(Ball& ball, unsigned int dt);
+    void Reset();
 };
 
 #endif

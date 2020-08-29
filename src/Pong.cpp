@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
 	bool quit = false;
 	SDL_Rect divideRect, playerRect, npcRect, ballRect;
 	Pong Pong;
+  Pong.play_has_started = 0;
 
   Uint32 dt = 0.0f;
 	if(Pong.Init() < 0)
@@ -124,11 +125,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+  dt = SDL_GetTicks() * .001;
 	Pong.DrawPlayingField(divideRect);
   Pong.DrawPaddles(playerRect, npcRect);
   Pong.DrawBall(ballRect);
   SDL_RenderPresent(Pong.renderer);
-  dt = SDL_GetTicks();
 
 	while(!quit)
 	{
@@ -138,8 +139,10 @@ int main(int argc, char *argv[])
 			{
 				quit = true;
 			}
+
 			if(event.type == SDL_KEYDOWN)
 			{
+        Pong.play_has_started = 1;
         // check which key was pressed
         // and react accordingly
         switch(event.key.keysym.sym)
@@ -163,16 +166,22 @@ int main(int argc, char *argv[])
             break;
         }
 			}
+
 			if(event.type == SDL_MOUSEBUTTONDOWN)
 			{
 				quit = true;
 			}
-
-      Pong.DrawPlayingField(divideRect);
-      Pong.DrawPaddles(playerRect, npcRect);
-      Pong.DrawBall(ballRect);
-      SDL_RenderPresent(Pong.renderer);
-      dt = SDL_GetTicks() - dt;
 		}
+
+    if(Pong.play_has_started)
+    {
+      Pong.Field->MoveBall(*(Pong.Field->ball), dt);
+    }
+
+    Pong.DrawPlayingField(divideRect);
+    Pong.DrawPaddles(playerRect, npcRect);
+    Pong.DrawBall(ballRect);
+    SDL_RenderPresent(Pong.renderer);
+    dt = (SDL_GetTicks() - dt) * .001;
 	}
 }
