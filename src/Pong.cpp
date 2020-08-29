@@ -43,7 +43,7 @@ int Pong::Init()
   cout << "Successfully created a window and a renderer" << endl;
 #endif
 
-	return 0;
+  return 0;
 }
 
 /*
