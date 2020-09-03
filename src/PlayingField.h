@@ -4,10 +4,15 @@
 #include "Paddle.h"
 #include "Ball.h"
 
+#include <math.h>
+#include <iostream>
+using namespace std;
+
 class PlayingField
 {
   public:
     Paddle *playerPaddle, *npcPaddle;
+    int player1Score, player2Score;
     Ball *ball;
 
     static const int height = 720;
@@ -17,7 +22,7 @@ class PlayingField
     PlayingField();
     void MovePaddleUp(Paddle& paddle, unsigned int dt);
     void MovePaddleDown(Paddle& paddle, unsigned int dt);
-    void MoveBall(Ball& ball, unsigned int dt);
+    void MoveBall(unsigned int dt);
     void Reset();
 };
 

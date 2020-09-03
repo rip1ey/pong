@@ -16,6 +16,7 @@ class Ball
     float vely;
     int xpos;
     int ypos;
+    float speed;
 
     Ball(int x, int y);
     void MoveBall(unsigned int dt);

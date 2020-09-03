@@ -1,12 +1,11 @@
 #ifndef PONG_H
 #define PONG_H
 
-#include <iostream>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "Paddle.h"
 #include "PlayingField.h"
-using namespace std;
 
 class Pong
 {
