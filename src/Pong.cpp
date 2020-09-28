@@ -112,27 +112,32 @@ void Pong::DrawBall(SDL_Rect& ball)
 
 int main(int argc, char *argv[])
 {
+  bool LeftPaddleUp, LeftPaddleDown, RightPaddleUp, RightPaddleDown;
   SDL_Event event;
   bool quit = false;
   SDL_Rect divideRect, playerRect, npcRect, ballRect;
   Pong Pong;
   Pong.play_has_started = 0;
 
-  Uint32 dt = 0.0f;
-  Uint32 lastTick = 0.0f;
-  Uint32 currTick = 0.0f;
+  LeftPaddleUp = LeftPaddleDown = RightPaddleUp = RightPaddleDown = false;
+
+  float dt = 0.0f;
+  float lastTick = 0.0f;
+  float currTick = 0.0f;
   if(Pong.Init() < 0)
   {
     cout << "An error occurred with starting Pong. Closing..." << endl;
     return -1;
   }
 
+  lastTick = SDL_GetTicks();
   Pong.DrawPlayingField(divideRect);
   Pong.DrawPaddles(playerRect, npcRect);
   Pong.DrawBall(ballRect);
   SDL_RenderPresent(Pong.renderer);
-  dt = SDL_GetTicks() * .1;
 
+  currTick = SDL_GetTicks();
+  dt = (currTick - lastTick) / 1000;
   while(!quit)
   {
     SDL_PollEvent(&event);
@@ -146,24 +151,24 @@ int main(int argc, char *argv[])
       Pong.play_has_started = 1;
       // check which key was pressed
       // and react accordingly
+      cout << "Current dt: " << dt << endl;
       switch(event.key.keysym.sym)
       {
         case SDLK_w:
           // move paddle1 up
-          cout << "change in time: " << dt << endl;
-          Pong.Field->MovePaddleUp(*(Pong.Field->playerPaddle), dt);
+          LeftPaddleUp = true;
           break;
         case SDLK_s:
           // move paddle1 down
-          Pong.Field->MovePaddleDown(*(Pong.Field->playerPaddle), dt);
+          LeftPaddleDown = true;
           break;
         case SDLK_UP:
           // move paddle2 up
-          Pong.Field->MovePaddleUp(*(Pong.Field->npcPaddle), dt);
+          RightPaddleUp = true;
           break;
         case SDLK_DOWN:
           // move paddle2 down
-          Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
+          RightPaddleDown = true;
           break;
       }
     }
@@ -178,12 +183,33 @@ int main(int argc, char *argv[])
       Pong.Field->MoveBall(dt);
     }
 
+    if(LeftPaddleUp)
+    {
+        Pong.Field->MovePaddleUp(*(Pong.Field->playerPaddle), dt);
+        LeftPaddleUp = false;
+    }
+    else if(LeftPaddleDown)
+    {
+        Pong.Field->MovePaddleDown(*(Pong.Field->playerPaddle), dt);
+        LeftPaddleDown = false;
+    }
+    else if(RightPaddleUp)
+    {
+        Pong.Field->MovePaddleUp(*(Pong.Field->npcPaddle), dt);
+        RightPaddleUp = false;
+    }
+    else if(RightPaddleDown)
+    {
+        Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
+        RightPaddleDown = false;
+    }
+
     Pong.DrawPlayingField(divideRect);
     Pong.DrawPaddles(playerRect, npcRect);
     Pong.DrawBall(ballRect);
     SDL_RenderPresent(Pong.renderer);
     currTick = SDL_GetTicks();
-    dt = (currTick - lastTick) * .5;
+    dt = (currTick - lastTick) / 1000.0f;
     lastTick = currTick;
   }
 }

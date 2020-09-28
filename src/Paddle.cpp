@@ -1,20 +1,20 @@
 #include "Paddle.h"
 
-Paddle::Paddle(int x, int y)
+Paddle::Paddle(float x, float y)
 {
   xpos = x;
   ypos = y;
   height = PADDLE_HEIGHT;
   width = PADDLE_WIDTH;
-  vely = 5.0f;
+  vely = 800.0f;
 }
 
-void Paddle::MoveUp(unsigned int dt)
+void Paddle::MoveUp(float dt)
 {
   ypos += -vely * dt;
 }
 
-void Paddle::MoveDown(unsigned int dt)
+void Paddle::MoveDown(float dt)
 {
   ypos += vely * dt;
 }

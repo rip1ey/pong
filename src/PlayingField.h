@@ -20,9 +20,9 @@ class PlayingField
     static const int divider = 8;
 
     PlayingField();
-    void MovePaddleUp(Paddle& paddle, unsigned int dt);
-    void MovePaddleDown(Paddle& paddle, unsigned int dt);
-    void MoveBall(unsigned int dt);
+    void MovePaddleUp(Paddle& paddle, float dt);
+    void MovePaddleDown(Paddle& paddle, float dt);
+    void MoveBall(float dt);
     void Reset();
 };
 

@@ -14,12 +14,12 @@ class Ball
     int height;
     float velx;
     float vely;
-    int xpos;
-    int ypos;
+    float xpos;
+    float ypos;
     float speed;
 
-    Ball(int x, int y);
-    void MoveBall(unsigned int dt);
+    Ball(float x, float y);
+    void MoveBall(float dt);
   private:
     int direction[2];
     int rand_num;

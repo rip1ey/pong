@@ -4,6 +4,9 @@
 #define PADDLE_HEIGHT 100
 #define PADDLE_WIDTH 10
 
+#include <iostream>
+using namespace std;
+
 class Paddle
 {
   public:
@@ -12,9 +15,9 @@ class Paddle
     float xpos, ypos;
     float vely;     // paddle will only move in y direction
 
-    Paddle(int x, int y);
-    void MoveUp(unsigned int dt);
-    void MoveDown(unsigned int dt);
+    Paddle(float x, float y);
+    void MoveUp(float dt);
+    void MoveDown(float dt);
 };
 
 #endif
