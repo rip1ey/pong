@@ -6,7 +6,7 @@ Paddle::Paddle(float x, float y)
   ypos = y;
   height = PADDLE_HEIGHT;
   width = PADDLE_WIDTH;
-  vely = 800.0f;
+  vely = 600.0f;
 }
 
 void Paddle::MoveUp(float dt)

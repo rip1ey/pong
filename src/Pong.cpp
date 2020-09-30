@@ -112,14 +112,11 @@ void Pong::DrawBall(SDL_Rect& ball)
 
 int main(int argc, char *argv[])
 {
-  bool LeftPaddleUp, LeftPaddleDown, RightPaddleUp, RightPaddleDown;
   SDL_Event event;
   bool quit = false;
   SDL_Rect divideRect, playerRect, npcRect, ballRect;
   Pong Pong;
   Pong.play_has_started = 0;
-
-  LeftPaddleUp = LeftPaddleDown = RightPaddleUp = RightPaddleDown = false;
 
   float dt = 0.0f;
   float lastTick = 0.0f;
@@ -140,68 +137,48 @@ int main(int argc, char *argv[])
   dt = (currTick - lastTick) / 1000;
   while(!quit)
   {
-    SDL_PollEvent(&event);
-    if(event.type == SDL_QUIT)
+    while(SDL_PollEvent(&event))
     {
-      quit = true;
-    }
-
-    if(event.type == SDL_KEYDOWN)
-    {
-      Pong.play_has_started = 1;
-      // check which key was pressed
-      // and react accordingly
-      cout << "Current dt: " << dt << endl;
-      switch(event.key.keysym.sym)
+      //SDL_PollEvent(&event);
+      if(event.type == SDL_QUIT)
       {
-        case SDLK_w:
-          // move paddle1 up
-          LeftPaddleUp = true;
-          break;
-        case SDLK_s:
-          // move paddle1 down
-          LeftPaddleDown = true;
-          break;
-        case SDLK_UP:
-          // move paddle2 up
-          RightPaddleUp = true;
-          break;
-        case SDLK_DOWN:
-          // move paddle2 down
-          RightPaddleDown = true;
-          break;
+        quit = true;
+      }
+
+      if(event.type == SDL_KEYDOWN)
+      {
+        Pong.play_has_started = 1;
+        // check which key was pressed
+        // and react accordingly
+        cout << "Current dt: " << dt << endl;
+        if(event.key.keysym.sym == SDLK_ESCAPE)
+        {
+          quit = true;
+        }
       }
     }
-
-    if(event.type == SDL_MOUSEBUTTONDOWN)
+    
+    const Uint8 *KeyStates = SDL_GetKeyboardState(NULL);
+    if(KeyStates[SDL_SCANCODE_W])
     {
-      quit = true;
+        Pong.Field->MovePaddleUp(*(Pong.Field->playerPaddle), dt);
+    }
+    else if(KeyStates[SDL_SCANCODE_S])
+    {
+        Pong.Field->MovePaddleDown(*(Pong.Field->playerPaddle), dt);
+    }
+    else if(KeyStates[SDL_SCANCODE_UP])
+    {
+        Pong.Field->MovePaddleUp(*(Pong.Field->npcPaddle), dt);
+    }
+    else if(KeyStates[SDL_SCANCODE_DOWN])
+    {
+        Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
     }
 
     if(Pong.play_has_started)
     {
       Pong.Field->MoveBall(dt);
-    }
-
-    if(LeftPaddleUp)
-    {
-        Pong.Field->MovePaddleUp(*(Pong.Field->playerPaddle), dt);
-        LeftPaddleUp = false;
-    }
-    else if(LeftPaddleDown)
-    {
-        Pong.Field->MovePaddleDown(*(Pong.Field->playerPaddle), dt);
-        LeftPaddleDown = false;
-    }
-    else if(RightPaddleUp)
-    {
-        Pong.Field->MovePaddleUp(*(Pong.Field->npcPaddle), dt);
-        RightPaddleUp = false;
-    }
-    else if(RightPaddleDown)
-    {
-        Pong.Field->MovePaddleDown(*(Pong.Field->npcPaddle), dt);
-        RightPaddleDown = false;
     }
 
     Pong.DrawPlayingField(divideRect);
