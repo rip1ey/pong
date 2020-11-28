@@ -14,6 +14,19 @@
   Running `make clean` will remove the `pong` executable, and the
   object files in the `src/obj` folder will be removed as well.
 
+#### Output
+
+```
+  ~/Documents/projects/pong -> make
+  g++ -c -o src/obj/Ball.o src/Ball.cpp -Isrc
+  g++ -c -o src/obj/Paddle.o src/Paddle.cpp -Isrc
+  g++ -c -o src/obj/PlayingField.o src/PlayingField.cpp -Isrc
+  g++ -c -o src/obj/Pong.o src/Pong.cpp -Isrc
+  g++ -o output/pong src/obj/Ball.o src/obj/Paddle.o src/obj/PlayingField.o src/obj/Pong.o -lSDL2 -lSDL2_ttf
+  ~/Documents/projects/pong -> make clean
+  rm src/obj/Ball.o src/obj/Paddle.o src/obj/PlayingField.o src/obj/Pong.o output/pong
+```
+
 ### References
 
 #### Font
