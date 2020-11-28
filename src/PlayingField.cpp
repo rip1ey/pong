@@ -38,76 +38,117 @@ void PlayingField::MovePaddleDown(Paddle& paddle, float dt)
 
 void PlayingField::MoveBall(float dt)
 {
+  float angle;
+  float collision_y, p_sect;
   float paddleF, paddleS, paddleTh, paddleT;
   float intersectPoint = 0.0f;
 
-  if(ball->ypos < 0 || (ball->ypos + ball->height) > height)
-  {
-    ball->vely = ball->speed * -1;
-  }
+  p_sect = playerPaddle->height / 3;
 
   if(ball->xpos > playerPaddle->xpos && ball->xpos < (playerPaddle->xpos + playerPaddle->width))
   {
-    if((ball->ypos > playerPaddle->ypos && (ball->ypos + ball->height) < (playerPaddle->ypos + playerPaddle->height)) ||
-      ((ball->ypos + ball->height) > (playerPaddle->ypos + playerPaddle->height) && ball->ypos < (playerPaddle->ypos + playerPaddle->height)) ||
-      ((ball->ypos < playerPaddle->ypos && (ball->ypos + ball->height) > playerPaddle->ypos)))
+    if(ball->ypos < (playerPaddle->ypos + playerPaddle->height) && ball->ypos > playerPaddle->ypos)
     {
-      // figure out where ball collides with paddle
-      if(ball->ypos > playerPaddle->ypos && (ball->ypos + ball->height) < (playerPaddle->ypos + playerPaddle->height))
-      {
-        intersectPoint = ball->ypos + (ball->height / 2);
-      }
-      else if(ball->ypos < playerPaddle->ypos && (ball->ypos + ball->height) > playerPaddle->ypos)
-      {
-        intersectPoint = playerPaddle->ypos;
-      }
-      else if(ball->ypos < (playerPaddle->ypos + playerPaddle->height) && (ball->ypos + ball->height) > (playerPaddle->ypos + playerPaddle->height))
-      {
-        intersectPoint = playerPaddle->ypos + playerPaddle->height;
-      }
+      collision_y = ball->ypos;
+    }
+    else if(ball->ypos > playerPaddle->ypos && (ball->ypos + ball->height) < (playerPaddle->ypos + playerPaddle->height))
+    {
+      collision_y = ball->ypos + (ball->height / 2);
+    }
+    else if(ball->ypos < (playerPaddle->ypos + playerPaddle->height) && (ball->ypos + ball->height) < (playerPaddle->ypos + playerPaddle->height))
+    {
+      collision_y = (ball->ypos + ball->height);
+    }
 
-      paddleF = playerPaddle->ypos;
-      paddleTh = (playerPaddle->height / 3) + playerPaddle->ypos;
-      paddleS = (playerPaddle->height / 3) * 2 + playerPaddle->ypos;
-      paddleT = playerPaddle->ypos + playerPaddle->height;
-
-      if(intersectPoint > paddleF && intersectPoint < paddleTh)
-      {
-        // top third
-        ball->velx = -ball->velx;
-        ball->vely = ball->speed * 1;
-      }
-      else if(intersectPoint >= paddleTh && intersectPoint < paddleS)
-      {
-        // middle
-        ball->velx = -ball->velx;
-        ball->vely = 0;
-      }
-      else if(intersectPoint >= paddleS && intersectPoint < paddleT)
-      {
-        // bottom third
-        ball->velx = -ball->velx;
-        ball->vely = ball->speed * 1;
-      }
+    // determine how to reflect the ball
+    if(collision_y > playerPaddle->ypos && collision_y < (playerPaddle->ypos + p_sect - 1))
+    {
+      angle = 150 * (PI / 180);
+      ball->velx = ball->speed * sin(angle);
+      ball->vely = ball->speed * tan(angle);
+    }
+    else if(collision_y > (playerPaddle->ypos + p_sect) && collision_y < (playerPaddle->ypos + 2 * p_sect - 1))
+    {
+      // collision in the middle
+      ball->velx = -ball->velx;
+      ball->vely = 0;
+    }
+    else if(collision_y > (playerPaddle->ypos + 2 * p_sect) && collision_y < (playerPaddle->ypos + playerPaddle->height))
+    {
+      // collision at bottom of paddle
+      angle = 60 * (PI / 90);
+      ball->velx = ball->speed * sin(angle);
+      ball->vely = -ball->speed * tan(angle);
     }
   }
   else if((ball->xpos + ball->width) > npcPaddle->xpos && (ball->xpos + ball->width) < (npcPaddle->xpos + npcPaddle->width))
   {
-    if((ball->ypos > npcPaddle->ypos && (ball->ypos + ball->height) < (npcPaddle->ypos + npcPaddle->height)) ||
-      ((ball->ypos + ball->height) > (npcPaddle->ypos + npcPaddle->height) && ball->ypos < (npcPaddle->ypos + npcPaddle->height)) ||
-      (ball->ypos < npcPaddle->ypos && (ball->ypos + ball->height) > npcPaddle->ypos))
+    if(ball->ypos < (npcPaddle->ypos + npcPaddle->height) && ball->ypos > npcPaddle->ypos)
     {
-      // figure out where ball collides with paddle
-      cout << "Collision with right paddle!" << endl;
+      collision_y = ball->ypos;
+    }
+    else if(ball->ypos > npcPaddle->ypos && (ball->ypos + ball->height) < (npcPaddle->ypos + npcPaddle->height))
+    {
+      collision_y = ball->ypos + (ball->height / 2);
+    }
+    else if(ball->ypos < (npcPaddle->ypos + npcPaddle->height) && (ball->ypos + ball->height) < (npcPaddle->ypos + npcPaddle->height))
+    {
+      collision_y = (ball->ypos + ball->height);
+    }
+
+    if(collision_y > npcPaddle->ypos && collision_y < (npcPaddle->ypos + p_sect - 1))
+    {
+      // collision at top of paddle
+      angle = 150 * (PI / 180);
+      ball->velx = -ball->speed * sin(angle);
+      ball->vely = ball->speed * tan(angle);
+    }
+    else if(collision_y > (npcPaddle->ypos + p_sect) && collision_y < (npcPaddle->ypos + 2 * p_sect - 1))
+    {
+      // collision in the middle
       ball->velx = -ball->velx;
       ball->vely = 0;
     }
+    else if(collision_y > (npcPaddle->ypos + 2 * p_sect) && collision_y < (npcPaddle->ypos + npcPaddle->height))
+    {
+      // collision at bottom of paddle
+      angle = 60 * (PI / 90);
+      ball->velx = -ball->speed * sin(angle);
+      ball->vely = -ball->speed * tan(angle);
+    }
+  }
+  // just reflect the ball's y velocity when it hits the
+  // top or bottom
+  else if(ball->ypos < 0 || (ball->ypos + ball->height) > height)
+  {
+    ball->vely = -ball->vely;
+  }
+  else if(ball->xpos < 0)
+  {
+    player2Score++;
+    Reset();
+  }
+  else if(ball->xpos > width)
+  {
+    player1Score++;
+    Reset();
   }
 
   ball->MoveBall(dt);
+
 }
 
+// set the paddles and ball to its initial state
 void PlayingField::Reset()
 {
+  playerPaddle->xpos = width / 10;
+  npcPaddle->xpos = ((width / 10) * 9) - PADDLE_WIDTH;
+
+  int startY = (height / 2) - (PADDLE_HEIGHT / 2);
+  playerPaddle->ypos = npcPaddle->ypos = startY;
+
+  ball->xpos = (width / 2) - (BALL_WIDTH / 2);
+  ball->ypos = (height / 2) - (BALL_HEIGHT / 2);
+  ball->vely = 0.0;
 
 }
