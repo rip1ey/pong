@@ -135,7 +135,6 @@ void PlayingField::MoveBall(float dt)
   }
 
   ball->MoveBall(dt);
-
 }
 
 // set the paddles and ball to its initial state
